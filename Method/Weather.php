@@ -1,6 +1,7 @@
 <?php
 namespace GDO\DogWeather\Method;
 
+use GDO\Address\GDO_Address;
 use GDO\Core\Application;
 use GDO\Core\GDO_ArgError;
 use GDO\Core\GDT;
@@ -110,15 +111,24 @@ final class Weather extends MethodForm
         {
             if (module_enabled('Address'))
             {
-                if ($city = $user->settingVar('Address', 'address_city'))
+                /** @var GDO_Address $address */
+                if ($address = $user->settingValue('Address', 'address'))
                 {
-                    $query = $city;
-                    if ($country = $user->settingValue('Address', 'address_country'))
+                    $query = $address->getCity();
+                    if ($country = $address->getCountry())
                     {
-                        /** @var GDO_Country $country **/
                         $query .= ",{$country->displayEnglishName()}";
                     }
                 }
+//                if ($city = $user->settingVar('Address', 'address_city'))
+//                {
+//                    $query = $city;
+//                    if ($country = $user->settingValue('Address', 'address_country'))
+//                    {
+//                        /** @var GDO_Country $country **/
+//
+//                    }
+//                }
             }
             if (module_enabled('Maps'))
             {
